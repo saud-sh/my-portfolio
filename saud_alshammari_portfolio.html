@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saud Sultan Alshammari | Data Science & Cloud Data Engineer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & Cairo (for Arabic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'Cairo', 'sans-serif'],
+                        arabic: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#070B14',
+                        darkCard: '#0F172A',
+                        accentCyan: '#06B6D4',
+                        accentEmerald: '#10B981',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Glassmorphism & Subtle Data Grid Utilities */
+        body {
+            font-family: 'Plus Jakarta Sans', 'Inter', 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+        html[lang="ar"] body {
+            font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(56, 189, 248, 0.14);
+        }
+        html:not(.dark) .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(14, 165, 233, 0.18);
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #22d3ee 0%, #10b981 55%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        html:not(.dark) .gradient-text {
+            background: linear-gradient(135deg, #0284c7 0%, #059669 60%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(130px);
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
+        }
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070B14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06B6D4;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-darkBg dark:text-slate-100 transition-colors duration-300 selection:bg-cyan-500 selection:text-white">
+
+    <!-- Interactive Data Node Canvas Background -->
+    <canvas id="dataCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-60 dark:opacity-80"></canvas>
+
+    <!-- Toast Notification Banner (No alert() used) -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white border border-cyan-500/40 shadow-2xl">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+            <span id="toastMessage" class="text-sm font-medium">Copied to clipboard!</span>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 inset-x-0 z-40 transition-all duration-300 backdrop-blur-md bg-white/75 dark:bg-darkBg/75 border-b border-slate-200/70 dark:border-slate-800/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#hero" class="flex items-center gap-2.5 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+                    SA
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-base tracking-tight leading-none" data-i18n="navName">Saud Alshammari</span>
+                    <span class="text-[11px] font-medium text-cyan-600 dark:text-cyan-400 tracking-wider uppercase mt-0.5" data-i18n="navRole">Data Engineer</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#about" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors" data-i18n="navAbout">About</a>
+                <a href="#experience" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors" data-i18n="navExperience">Experience</a>
+                <a href="#projects" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors" data-i18n="navProjects">Projects</a>
+                <a href="#skills" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors" data-i18n="navSkills">Skills</a>
+                <a href="#certifications" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors" data-i18n="navCerts">Certifications</a>
+                <a href="#contact" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors" data-i18n="navContact">Contact</a>
+            </nav>
+
+            <!-- Action Controls: Language Switcher + Theme Toggle + Mobile Menu -->
+            <div class="flex items-center gap-2.5">
+                <!-- Language Switcher -->
+                <button id="langToggle" onclick="toggleLanguage()" class="px-3.5 py-2 rounded-xl text-xs font-bold tracking-wide bg-slate-200/80 dark:bg-slate-800/90 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-slate-950 transition-all flex items-center gap-1.5 border border-slate-300/60 dark:border-slate-700">
+                    <i data-lucide="languages" class="w-4 h-4"></i>
+                    <span id="langLabel">عربي</span>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" onclick="toggleTheme()" aria-label="Toggle Theme" class="p-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-800/90 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors border border-slate-300/60 dark:border-slate-700">
+                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+                    <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-800/90 border border-slate-300/60 dark:border-slate-700">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobileMenu" class="hidden md:hidden px-4 pb-5 pt-2 bg-white/95 dark:bg-darkCard/95 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex flex-col space-y-3 text-sm font-medium">
+                <a href="#about" onclick="toggleMobileMenu()" class="py-2 px-3 rounded-lg hover:bg-cyan-500/10 hover:text-cyan-400" data-i18n="navAbout">About</a>
+                <a href="#experience" onclick="toggleMobileMenu()" class="py-2 px-3 rounded-lg hover:bg-cyan-500/10 hover:text-cyan-400" data-i18n="navExperience">Experience</a>
+                <a href="#projects" onclick="toggleMobileMenu()" class="py-2 px-3 rounded-lg hover:bg-cyan-500/10 hover:text-cyan-400" data-i18n="navProjects">Projects</a>
+                <a href="#skills" onclick="toggleMobileMenu()" class="py-2 px-3 rounded-lg hover:bg-cyan-500/10 hover:text-cyan-400" data-i18n="navSkills">Skills</a>
+                <a href="#certifications" onclick="toggleMobileMenu()" class="py-2 px-3 rounded-lg hover:bg-cyan-500/10 hover:text-cyan-400" data-i18n="navCerts">Certifications</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="py-2 px-3 rounded-lg hover:bg-cyan-500/10 hover:text-cyan-400" data-i18n="navContact">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10">
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden">
+            <!-- Ambient Glow Orbs -->
+            <div class="hero-glow bg-cyan-500 -top-24 -left-24"></div>
+            <div class="hero-glow bg-emerald-500 bottom-10 -right-24"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    <!-- Hero Left Text -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <!-- Status Badge -->
+                        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-card text-xs sm:text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                            <span class="relative flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                            </span>
+                            <span data-i18n="heroBadge">Microsoft Certified Fabric Data Engineer • Riyadh, KSA</span>
+                        </div>
+
+                        <!-- Main Title -->
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15]">
+                            <span class="block text-slate-600 dark:text-slate-400 text-xl sm:text-2xl font-semibold mb-2" data-i18n="heroGreeting">Hello, I'm</span>
+                            <span class="gradient-text" data-i18n="heroName">Saud Sultan Alshammari</span>
+                        </h1>
+
+                        <!-- Subheadline -->
+                        <h2 class="text-lg sm:text-xl font-semibold text-slate-700 dark:text-slate-200" data-i18n="heroHeadline">
+                            Data Science Graduate | Cloud Data Engineer | AI & Computer Vision Developer
+                        </h2>
+
+                        <!-- Bio Summary -->
+                        <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl" data-i18n="heroBio">
+                            Ambitious Data Science graduate with practical industry experience at <strong class="text-slate-900 dark:text-white font-semibold">Saudi Aramco</strong> and <strong class="text-slate-900 dark:text-white font-semibold">MCIT</strong>. Specializing in cloud data transformation, Microsoft Fabric (OneLake & Lakehouse), and end-to-end AI pipelines that turn complex data into strategic decisions.
+                        </p>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-wrap items-center gap-4 pt-2">
+                            <a href="#projects" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold text-sm sm:text-base shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-0.5 flex items-center gap-2">
+                                <i data-lucide="layers" class="w-4 h-4"></i>
+                                <span data-i18n="ctaProjects">Explore Projects</span>
+                            </a>
+                            <a href="#contact" class="px-6 py-3.5 rounded-2xl glass-card hover:border-cyan-500/60 font-semibold text-sm sm:text-base transition-all hover:-translate-y-0.5 flex items-center gap-2">
+                                <i data-lucide="send" class="w-4 h-4 text-cyan-500"></i>
+                                <span data-i18n="ctaContact">Get In Touch</span>
+                            </a>
+                            <button onclick="copyEmail()" class="px-5 py-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 hover:border-emerald-500/60 text-sm font-medium transition-all flex items-center gap-2">
+                                <i data-lucide="copy" class="w-4 h-4 text-emerald-500"></i>
+                                <span data-i18n="ctaCopyEmail">Copy Email</span>
+                            </button>
+                        </div>
+
+                        <!-- Quick Stats Bar -->
+                        <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-200/80 dark:border-slate-800/80 max-w-xl">
+                            <div>
+                                <div class="text-2xl sm:text-3xl font-extrabold gradient-text">95.66%</div>
+                                <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat1">YOLOv8 Model Accuracy</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl sm:text-3xl font-extrabold gradient-text">9+</div>
+                                <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat2">Global Certifications</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl sm:text-3xl font-extrabold gradient-text">2</div>
+                                <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat3">Enterprise Co-op Roles</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Right Visual Card (Interactive Data Architecture Terminal Card) -->
+                    <div class="lg:col-span-5">
+                        <div class="glass-card rounded-3xl p-6 sm:p-7 relative overflow-hidden shadow-2xl">
+                            <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-200/70 dark:border-slate-800">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                                    <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                </div>
+                                <span class="text-xs font-mono text-slate-400">saud_profile.pipeline.py</span>
+                            </div>
+
+                            <!-- Simulated Code & Pipeline Architecture -->
+                            <div class="space-y-4 font-mono text-xs sm:text-sm">
+                                <div class="p-3.5 rounded-2xl bg-slate-900/90 text-slate-200 border border-slate-800">
+                                    <div class="text-cyan-400 mb-1"># Core Specialization</div>
+                                    <div><span class="text-purple-400">class</span> <span class="text-emerald-400">DataEngineer</span>:</div>
+                                    <div class="pl-4 text-slate-300">name = <span class="text-amber-300">"Saud S. Alshammari"</span></div>
+                                    <div class="pl-4 text-slate-300">location = <span class="text-amber-300">"Riyadh, Saudi Arabia"</span></div>
+                                    <div class="pl-4 text-slate-300">degree = <span class="text-amber-300">"B.Sc. Data Science (2026)"</span></div>
+                                    <div class="pl-4 text-slate-300">fabric_cert = <span class="text-cyan-300">"DP-700 Associate"</span></div>
+                                </div>
+
+                                <!-- Visual Stack Pills -->
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="p-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center gap-3">
+                                        <div class="p-2 rounded-xl bg-cyan-500/20 text-cyan-400">
+                                            <i data-lucide="database" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-800 dark:text-white">MS Fabric</div>
+                                            <div class="text-[11px] text-slate-500 dark:text-slate-400">OneLake & Lakehouse</div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3">
+                                        <div class="p-2 rounded-xl bg-emerald-500/20 text-emerald-400">
+                                            <i data-lucide="cpu" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-800 dark:text-white">AI & Vision</div>
+                                            <div class="text-[11px] text-slate-500 dark:text-slate-400">YOLOv8 & TensorFlow</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Industry Badges -->
+                                <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <i data-lucide="building-2" class="w-4 h-4 text-cyan-500"></i>
+                                        <span class="text-xs font-sans font-semibold" data-i18n="cardExpLabel">Training Pedigree</span>
+                                    </div>
+                                    <span class="text-xs font-sans font-bold text-emerald-600 dark:text-emerald-400">Saudi Aramco • MCIT</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT & EDUCATION SECTION -->
+        <section id="about" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="reveal text-center max-w-3xl mx-auto mb-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400" data-i18n="aboutSub">Background & Academic Foundation</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-2" data-i18n="aboutTitle">Bridging Data Engineering & Applied AI</h2>
+                </div>
+
+                <div class="grid md:grid-cols-12 gap-8 items-stretch">
+                    <!-- About Narrative -->
+                    <div class="reveal md:col-span-7 glass-card rounded-3xl p-7 sm:p-9 flex flex-col justify-between">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-xs font-bold mb-4">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                <span data-i18n="aboutPill">Professional Profile</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4" data-i18n="aboutHeading">Architecting Scalable Lakehouses & Intelligent Systems</h3>
+                            <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-4" data-i18n="aboutP1">
+                                As a Data Science graduate from the University of Hail, I combine rigorous statistical and machine learning foundations with modern cloud data engineering practices. My hands-on cooperative training at both Saudi Aramco and the Ministry of Communication and Information Technology (MCIT) shaped my ability to operate in high-impact enterprise environments.
+                            </p>
+                            <p class="text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="aboutP2">
+                                Certified across Microsoft Fabric (DP-700), Google Data Analytics, IBM Business Analysis, Oracle Cloud, and Cisco Python, I am passionate about cloud migration, data governance, and building automated pipelines that empower executive business intelligence.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+                            <div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400" data-i18n="langTitle">Languages</div>
+                                <div class="font-bold text-sm mt-1" data-i18n="langValue">Arabic (Native), English (Fluent)</div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400" data-i18n="locTitle">Base Location</div>
+                                <div class="font-bold text-sm mt-1" data-i18n="locValue">Riyadh, Saudi Arabia</div>
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <div class="text-xs text-slate-500 dark:text-slate-400" data-i18n="focusTitle">Core Focus</div>
+                                <div class="font-bold text-sm mt-1 text-cyan-600 dark:text-cyan-400" data-i18n="focusValue">Cloud Data & AI</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Education Card -->
+                    <div class="reveal md:col-span-5 glass-card rounded-3xl p-7 sm:p-9 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute -right-8 -top-8 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl"></div>
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center text-white shadow-lg mb-6">
+                                <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400" data-i18n="eduBadge">Academic Degree</span>
+                            <h3 class="text-2xl font-bold mt-1" data-i18n="eduDegree">Bachelor of Data Science</h3>
+                            <p class="text-base font-semibold text-slate-700 dark:text-slate-300 mt-2" data-i18n="eduUni">University of Hail</p>
+                            <div class="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-lg bg-slate-200/70 dark:bg-slate-800 text-xs font-semibold">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-500"></i>
+                                <span data-i18n="eduDate">Graduated: June 2026</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 space-y-3">
+                            <div class="text-xs font-bold uppercase tracking-wider text-slate-400" data-i18n="eduHighlightsTitle">Key Focus Areas</div>
+                            <ul class="space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
+                                <li class="flex items-center gap-2.5">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                                    <span data-i18n="eduH1">Deep Learning & Computer Vision (YOLOv8)</span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                                    <span data-i18n="eduH2">Data Warehousing, Modeling & Governance</span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                                    <span data-i18n="eduH3">Cloud Data Ingestion & BI Visualization</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE TIMELINE SECTION -->
+        <section id="experience" class="py-20 relative">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="reveal text-center max-w-2xl mx-auto mb-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400" data-i18n="expSub">Enterprise Exposure</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-2" data-i18n="expTitle">Cooperative Training Experience</h2>
+                </div>
+
+                <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-cyan-500 before:via-emerald-500 before:to-transparent">
+                    
+                    <!-- Experience 1: MCIT -->
+                    <div class="reveal relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-50 dark:border-darkBg bg-cyan-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                            <i data-lucide="radio-tower" class="w-4 h-4"></i>
+                        </div>
+                        <div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-card p-6 sm:p-7 rounded-3xl hover:border-cyan-500/50 transition-all">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-400" data-i18n="expRoleBadge">Cooperative Training Intern</span>
+                                <span class="text-xs font-semibold text-slate-400">MCIT</span>
+                            </div>
+                            <h3 class="text-xl font-bold" data-i18n="exp1Org">Ministry of Communication and Information Technology (MCIT)</h3>
+                            <p class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-1" data-i18n="exp1Dept">Parallel Communications Sector Development Department</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed" data-i18n="exp1Desc">
+                                Contributed to sector development initiatives, data analytics reporting, and digital transformation workflows within Saudi Arabia's national ICT regulatory and development body.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Experience 2: Saudi Aramco -->
+                    <div class="reveal relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-50 dark:border-darkBg bg-emerald-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                            <i data-lucide="flame" class="w-4 h-4"></i>
+                        </div>
+                        <div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-card p-6 sm:p-7 rounded-3xl hover:border-emerald-500/50 transition-all">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400" data-i18n="expRoleBadge">Cooperative Training Intern</span>
+                                <span class="text-xs font-semibold text-slate-400">Saudi Aramco</span>
+                            </div>
+                            <h3 class="text-xl font-bold" data-i18n="exp2Org">Saudi Aramco</h3>
+                            <p class="text-sm font-semibold text-cyan-600 dark:text-cyan-400 mt-1" data-i18n="exp2Dept">DS Learning & Development Department</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed" data-i18n="exp2Desc">
+                                Supported data-driven learning and workforce development operations, structuring analytical insights, tracking competency metrics, and enhancing automated reporting processes.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURED PROJECTS SECTION -->
+        <section id="projects" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="reveal text-center max-w-3xl mx-auto mb-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400" data-i18n="projSub">Applied AI & Full-Stack Engineering</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-2" data-i18n="projTitle">Featured Projects</h2>
+                </div>
+
+                <!-- Flagship Project: Compliance & Risk Engine -->
+                <div class="reveal glass-card rounded-3xl p-7 sm:p-9 mb-8 group hover:border-cyan-500/60 transition-all duration-300 shadow-xl">
+                    <div class="grid lg:grid-cols-12 gap-8 items-start">
+                        <!-- Visual Architecture Banner & Role Box -->
+                        <div class="lg:col-span-5 space-y-5">
+                            <div class="rounded-2xl bg-gradient-to-br from-slate-950 via-cyan-950 to-emerald-950 p-6 relative overflow-hidden border border-cyan-500/30 flex flex-col justify-between min-h-[220px]">
+                                <div class="flex flex-wrap items-center justify-between gap-2 z-10">
+                                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-400/30" data-i18n="p0Badge1">Enterprise SaaS / Native App</span>
+                                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-extrabold border border-emerald-400/30">Snowflake & Streamlit</span>
+                                </div>
+
+                                <div class="my-5 z-10">
+                                    <div class="text-xs font-mono text-cyan-300/80 mb-1">Hybrid Rule Engine • Risk Scoring • RBAC</div>
+                                    <div class="text-white font-extrabold text-xl sm:text-2xl leading-snug" data-i18n="p0BannerTitle">Intelligent Governance & Risk Architecture</div>
+                                </div>
+
+                                <div class="flex items-center gap-3 text-xs text-slate-300 z-10">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
+                                        <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                        <span data-i18n="p0Metric1">Audit & Versioning</span>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
+                                        <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                        <span data-i18n="p0Metric2">Flexible Data Mapping</span>
+                                    </span>
+                                </div>
+
+                                <i data-lucide="shield-check" class="w-28 h-28 absolute -right-4 -bottom-4 text-cyan-400/10 pointer-events-none"></i>
+                            </div>
+
+                            <!-- My Role Highlight Card -->
+                            <div class="p-5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800">
+                                <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 mb-2">
+                                    <i data-lucide="user-check" class="w-4 h-4"></i>
+                                    <span data-i18n="p0RoleLabel">My Role & Contributions</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="p0RoleDesc">
+                                    Led solution architecture design, rules & controls data modeling, compliance & risk engine engineering, scoring methodology definition, UX & configuration flows, and packaging the platform as a distributable Enterprise SaaS / Snowflake Native App.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Capabilities & Tech Stack -->
+                        <div class="lg:col-span-7 flex flex-col justify-between">
+                            <div>
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 text-xs font-bold mb-3">
+                                    <i data-lucide="star" class="w-3.5 h-3.5"></i>
+                                    <span data-i18n="p0FlagshipTag">Flagship Enterprise Product</span>
+                                </div>
+                                <h3 class="text-2xl sm:text-3xl font-extrabold group-hover:text-cyan-500 transition-colors" data-i18n="p0Title">
+                                    Compliance & Risk Engine
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base mt-3 leading-relaxed" data-i18n="p0Summary">
+                                    An intelligent compliance and risk management engine engineered as a distributable enterprise product, transforming regulatory controls, corporate policies, and operational data into clear, actionable risk and compliance assessments.
+                                </p>
+
+                                <!-- Structured Capabilities -->
+                                <ul class="mt-5 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                                    <li class="flex items-start gap-3">
+                                        <i data-lucide="layers" class="w-4 h-4 text-cyan-500 shrink-0 mt-1"></i>
+                                        <span data-i18n="p0B1"><strong>Hybrid Governance & Rule Model:</strong> Combines centrally managed baseline controls with tenant-level customization of thresholds, policies, and internal rules without altering core governance standards.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i data-lucide="gauge" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                                        <span data-i18n="p0B2"><strong>End-to-End Risk & Compliance Lifecycle:</strong> Supports compliance framework management, automated rule evaluation, dynamic risk & compliance scoring, open findings generation, corrective action recommendations, versioning, and full approval audit logs.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i data-lucide="lock" class="w-4 h-4 text-cyan-500 shrink-0 mt-1"></i>
+                                        <span data-i18n="p0B3"><strong>Secure Multi-Source Integration:</strong> Connects to enterprise data sources under strict least-privilege permissions (RBAC), harmonizing diverse schemas through a flexible Data Mapping layer.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Tech Stack Tags -->
+                            <div class="flex flex-wrap gap-2 mt-7 pt-5 border-t border-slate-200/80 dark:border-slate-800">
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300">Snowflake Native Apps</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300">SQL</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300">Python</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300">Rule Engine Design</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300">Risk Scoring</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300">Compliance Automation</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-200/80 dark:bg-slate-800">Data Modeling</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-200/80 dark:bg-slate-800">Data Mapping</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-200/80 dark:bg-slate-800">RBAC & App Security</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-200/80 dark:bg-slate-800">Audit Logging & Versioning</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-200/80 dark:bg-slate-800">Streamlit</span>
+                                <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-200/80 dark:bg-slate-800">Git / GitHub</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    
+                    <!-- Project 1: Thamudic Inscription Recognition -->
+                    <div class="reveal glass-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between group hover:border-cyan-500/50 transition-all duration-300 hover:-translate-y-1">
+                        <div>
+                            <!-- Visual Banner Header -->
+                            <div class="h-48 rounded-2xl bg-gradient-to-br from-slate-900 via-cyan-950 to-emerald-950 p-6 mb-6 relative overflow-hidden flex flex-col justify-between border border-cyan-500/20">
+                                <div class="flex items-center justify-between z-10">
+                                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-400/30">Computer Vision & AI</span>
+                                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-extrabold border border-emerald-400/30">95.66% Accuracy</span>
+                                </div>
+                                <div class="z-10">
+                                    <div class="text-xs font-mono text-cyan-300/80 mb-1">YOLOv8 • 3,000+ Labeled Dataset • Flutter</div>
+                                    <div class="text-white font-bold text-lg">Cultural Heritage Preservation AI</div>
+                                </div>
+                                <!-- Decorative Geometric Matrix -->
+                                <div class="absolute right-4 bottom-2 opacity-20 text-cyan-400 font-mono text-4xl select-none">𐪕𐪁𐪌𐪃</div>
+                            </div>
+
+                            <h3 class="text-2xl font-bold group-hover:text-cyan-500 transition-colors" data-i18n="p1Title">
+                                Thamudic Inscription Recognition & Translation System
+                            </h3>
+
+                            <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base mt-3 leading-relaxed" data-i18n="p1Summary">
+                                An end-to-end AI mobile solution designed to detect, classify, and translate ancient Thamudic inscriptions directly from smartphone camera captures, preserving Arabian cultural heritage.
+                            </p>
+
+                            <!-- Key Highlights -->
+                            <ul class="mt-5 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
+                                <li class="flex items-start gap-2.5">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-500 shrink-0 mt-0.5"></i>
+                                    <span data-i18n="p1B1">Curated and annotated a custom dataset of <strong>3,000+ inscription images</strong> for model training & validation.</span>
+                                </li>
+                                <li class="flex items-start gap-2.5">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-500 shrink-0 mt-0.5"></i>
+                                    <span data-i18n="p1B2">Trained a <strong>YOLOv8</strong> deep learning model achieving <strong>95.66% accuracy</strong> in symbol recognition.</span>
+                                </li>
+                                <li class="flex items-start gap-2.5">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-500 shrink-0 mt-0.5"></i>
+                                    <span data-i18n="p1B3">Built a cross-platform <strong>Flutter</strong> app integrated with <strong>Firebase</strong> for real-time translation storage and retrieval.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Tech Tags -->
+                        <div class="flex flex-wrap gap-2 mt-7 pt-5 border-t border-slate-200/80 dark:border-slate-800">
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-300">YOLOv8</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-300">Python</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-300">Deep Learning</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-300">Flutter</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-300">Firebase</span>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Employee Training & Promotion Management Platform -->
+                    <div class="reveal glass-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between group hover:border-emerald-500/50 transition-all duration-300 hover:-translate-y-1">
+                        <div>
+                            <!-- Visual Banner Header -->
+                            <div class="h-48 rounded-2xl bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 p-6 mb-6 relative overflow-hidden flex flex-col justify-between border border-emerald-500/20">
+                                <div class="flex items-center justify-between z-10">
+                                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30">Enterprise Web Platform</span>
+                                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-extrabold border border-cyan-400/30">Workflow Automation</span>
+                                </div>
+                                <div class="z-10">
+                                    <div class="text-xs font-mono text-emerald-300/80 mb-1">REST APIs • RBAC Auth • Compliance Dashboards</div>
+                                    <div class="text-white font-bold text-lg">HR Training & Promotion Readiness System</div>
+                                </div>
+                                <i data-lucide="bar-chart-3" class="w-20 h-20 absolute right-4 bottom-2 text-emerald-400/15"></i>
+                            </div>
+
+                            <h3 class="text-2xl font-bold group-hover:text-emerald-500 transition-colors" data-i18n="p2Title">
+                                Employee Training & Promotion Management Platform
+                            </h3>
+
+                            <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base mt-3 leading-relaxed" data-i18n="p2Summary">
+                                A centralized web platform built to digitize employee training records, automate certification expiry tracking, and streamline multi-tier promotion readiness approvals.
+                            </p>
+
+                            <!-- Key Highlights -->
+                            <ul class="mt-5 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
+                                <li class="flex items-start gap-2.5">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                                    <span data-i18n="p2B1">Implemented <strong>role-based access control (RBAC)</strong> for employees, supervisors, and training coordinators.</span>
+                                </li>
+                                <li class="flex items-start gap-2.5">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                                    <span data-i18n="p2B2">Built automated background scheduling services for course expiry monitoring and renewal alerts.</span>
+                                </li>
+                                <li class="flex items-start gap-2.5">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                                    <span data-i18n="p2B3">Designed executive reporting dashboards to monitor departmental compliance and training completion.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Tech Tags -->
+                        <div class="flex flex-wrap gap-2 mt-7 pt-5 border-t border-slate-200/80 dark:border-slate-800">
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-300">Web Development</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-300">Database Design</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-300">REST APIs</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-300">Auth Systems</span>
+                            <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-300">Process Automation</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- TECHNICAL SKILLS SECTION -->
+        <section id="skills" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="reveal text-center max-w-3xl mx-auto mb-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400" data-i18n="skillsSub">Technical Arsenal</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-2" data-i18n="skillsTitle">Skills & Core Competencies</h2>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Category 1: Cloud & Data Platforms -->
+                    <div class="reveal glass-card rounded-3xl p-6 hover:border-cyan-500/40 transition-all">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-11 h-11 rounded-2xl bg-cyan-500/15 text-cyan-500 flex items-center justify-center">
+                                <i data-lucide="cloud" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-lg" data-i18n="skillCat1">Cloud & Data Platforms</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Microsoft Fabric</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Snowflake Native Apps</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">OneLake & Lakehouse</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Streamlit</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Power BI</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Tableau</span>
+                        </div>
+                    </div>
+
+                    <!-- Category 2: Programming & Querying -->
+                    <div class="reveal glass-card rounded-3xl p-6 hover:border-emerald-500/40 transition-all">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-11 h-11 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
+                                <i data-lucide="code-2" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-lg" data-i18n="skillCat2">Programming & Data Stack</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Python</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">SQL</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Pandas</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">NumPy</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Matplotlib</span>
+                        </div>
+                    </div>
+
+                    <!-- Category 3: Machine Learning & AI -->
+                    <div class="reveal glass-card rounded-3xl p-6 hover:border-cyan-500/40 transition-all">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-11 h-11 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
+                                <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-lg" data-i18n="skillCat3">Machine Learning & AI</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Scikit-learn</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">TensorFlow</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">YOLOv8</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Computer Vision</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Deep Learning</span>
+                        </div>
+                    </div>
+
+                    <!-- Category 4: Data Governance & Architecture -->
+                    <div class="reveal glass-card rounded-3xl p-6 hover:border-emerald-500/40 transition-all">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-11 h-11 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-lg" data-i18n="skillCat4">Data Governance & Architecture</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Data Architecture</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Data Modeling & Mapping</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Rule Engine & Risk Scoring</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">RBAC & Audit Logging</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Data Warehousing</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Data Quality</span>
+                        </div>
+                    </div>
+
+                    <!-- Category 5: Data Analysis & EDA -->
+                    <div class="reveal glass-card rounded-3xl p-6 hover:border-cyan-500/40 transition-all">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-11 h-11 rounded-2xl bg-sky-500/15 text-sky-400 flex items-center justify-center">
+                                <i data-lucide="line-chart" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-lg" data-i18n="skillCat5">Data Analytics & Wrangling</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Data Cleaning</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Data Wrangling</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Exploratory Data Analysis (EDA)</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Excel (Pivot Tables & Formulas)</span>
+                        </div>
+                    </div>
+
+                    <!-- Category 6: Business Analysis -->
+                    <div class="reveal glass-card rounded-3xl p-6 hover:border-emerald-500/40 transition-all">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-11 h-11 rounded-2xl bg-rose-500/15 text-rose-400 flex items-center justify-center">
+                                <i data-lucide="git-merge" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-lg" data-i18n="skillCat6">Business Analysis</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Requirements Analysis</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Process Mapping</span>
+                            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800/90">Stakeholder Analysis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CERTIFICATIONS SECTION -->
+        <section id="certifications" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="reveal text-center max-w-3xl mx-auto mb-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400" data-i18n="certSub">Verified Industry Credentials</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-2" data-i18n="certTitle">Professional Certifications</h2>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Cert 1 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-cyan-500">
+                        <div class="p-2.5 rounded-xl bg-cyan-500/15 text-cyan-500 shrink-0">
+                            <i data-lucide="award" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">Microsoft Certified</span>
+                            <h3 class="font-bold text-base mt-0.5">Fabric DP-700: Fabric Data Engineer Associate</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 2 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-emerald-500">
+                        <div class="p-2.5 rounded-xl bg-emerald-500/15 text-emerald-500 shrink-0">
+                            <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Google</span>
+                            <h3 class="font-bold text-base mt-0.5">Google Data Analytics Professional Certificate</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 3 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-blue-500">
+                        <div class="p-2.5 rounded-xl bg-blue-500/15 text-blue-400 shrink-0">
+                            <i data-lucide="briefcase" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-500">IBM</span>
+                            <h3 class="font-bold text-base mt-0.5">IBM Business Analysis Professional Certificate</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 4 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-sky-500">
+                        <div class="p-2.5 rounded-xl bg-sky-500/15 text-sky-400 shrink-0">
+                            <i data-lucide="terminal" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sky-500">CISCO</span>
+                            <h3 class="font-bold text-base mt-0.5">Python Essentials Certification</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 5 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-rose-500">
+                        <div class="p-2.5 rounded-xl bg-rose-500/15 text-rose-400 shrink-0">
+                            <i data-lucide="cloud-cog" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-500">Oracle</span>
+                            <h3 class="font-bold text-base mt-0.5">Oracle Fusion Cloud ERP Process Essentials Certified - Rel 1</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 6 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-rose-500">
+                        <div class="p-2.5 rounded-xl bg-rose-500/15 text-rose-400 shrink-0">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-500">Oracle</span>
+                            <h3 class="font-bold text-base mt-0.5">Oracle Fusion Cloud HCM Process Essentials Certified - Rel 1</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 7 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-cyan-500">
+                        <div class="p-2.5 rounded-xl bg-cyan-500/15 text-cyan-500 shrink-0">
+                            <i data-lucide="database" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-500">Microsoft</span>
+                            <h3 class="font-bold text-base mt-0.5">Getting Started with Microsoft Fabric</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 8 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-amber-500">
+                        <div class="p-2.5 rounded-xl bg-amber-500/15 text-amber-400 shrink-0">
+                            <i data-lucide="shield" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-500">Governance</span>
+                            <h3 class="font-bold text-base mt-0.5">Data Governance and Compliance</h3>
+                        </div>
+                    </div>
+
+                    <!-- Cert 9 -->
+                    <div class="reveal glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-purple-500">
+                        <div class="p-2.5 rounded-xl bg-purple-500/15 text-purple-400 shrink-0">
+                            <i data-lucide="network" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-purple-400">EDRAAK</span>
+                            <h3 class="font-bold text-base mt-0.5">Networking Fundamentals Certification</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-20 relative">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="reveal glass-card rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+                    <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="grid lg:grid-cols-12 gap-10 items-center">
+                        <!-- Contact Details -->
+                        <div class="lg:col-span-5 space-y-6">
+                            <span class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400" data-i18n="contactSub">Let's Collaborate</span>
+                            <h2 class="text-3xl sm:text-4xl font-extrabold" data-i18n="contactTitle">Ready to Build Data-Driven Impact?</h2>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="contactDesc">
+                                Open to Data Engineering, Data Science, Cloud Analytics, and AI opportunities across Saudi Arabia. Feel free to reach out directly via email, phone, or the message form.
+                            </p>
+
+                            <div class="space-y-4 pt-2">
+                                <!-- Email Box -->
+                                <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-10 h-10 rounded-xl bg-cyan-500/15 text-cyan-500 flex items-center justify-center">
+                                            <i data-lucide="mail" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-slate-500">Email</div>
+                                            <a href="mailto:SAUDSC5B@GMAIL.COM" class="text-sm font-bold hover:text-cyan-500 transition-colors">SAUDSC5B@GMAIL.COM</a>
+                                        </div>
+                                    </div>
+                                    <button onclick="copyEmail()" class="p-2 rounded-xl hover:bg-cyan-500/20 text-cyan-500 transition-colors" title="Copy Email">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Phone Box -->
+                                <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
+                                            <i data-lucide="phone" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-slate-500" data-i18n="phoneLabel">Phone / WhatsApp</div>
+                                            <a href="tel:+966559246693" dir="ltr" class="text-sm font-bold hover:text-emerald-500 transition-colors">+966 55 924 6693</a>
+                                        </div>
+                                    </div>
+                                    <button onclick="copyPhone()" class="p-2 rounded-xl hover:bg-emerald-500/20 text-emerald-500 transition-colors" title="Copy Phone">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Location Box -->
+                                <div class="flex items-center gap-3.5 p-4 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
+                                    <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
+                                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-500" data-i18n="locTitle">Location</div>
+                                        <div class="text-sm font-bold" data-i18n="locValue">Riyadh, Saudi Arabia</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Contact Form -->
+                        <div class="lg:col-span-7">
+                            <form id="contactForm" onsubmit="handleContactSubmit(event)" class="space-y-4 bg-white/60 dark:bg-slate-900/60 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800">
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-slate-500" data-i18n="formName">Your Name</label>
+                                        <input type="text" id="senderName" required placeholder="Ahmed Al-Otaibi" class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-300/70 dark:border-slate-700 focus:outline-none focus:border-cyan-500 text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-slate-500" data-i18n="formEmail">Your Email</label>
+                                        <input type="email" id="senderEmail" required placeholder="name@company.com" class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-300/70 dark:border-slate-700 focus:outline-none focus:border-cyan-500 text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-slate-500" data-i18n="formSubject">Subject</label>
+                                    <input type="text" id="senderSubject" required placeholder="Data Engineering Opportunity" class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-300/70 dark:border-slate-700 focus:outline-none focus:border-cyan-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-slate-500" data-i18n="formMsg">Message</label>
+                                    <textarea id="senderMessage" rows="4" required placeholder="Hello Saud, I'd love to discuss..." class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-300/70 dark:border-slate-700 focus:outline-none focus:border-cyan-500 text-sm resize-none"></textarea>
+                                </div>
+                                <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold text-sm sm:text-base shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="send" class="w-4 h-4"></i>
+                                    <span data-i18n="formSubmit">Send Message</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative z-10 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-500 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="font-semibold" data-i18n="footerCopy">© 2026 Saud Sultan Alshammari. All rights reserved.</div>
+            <div class="flex items-center gap-4 text-xs">
+                <span class="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-semibold">Data Science • Microsoft Fabric • AI</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT: Bilingual Dictionary, Interactive Data Canvas, Clipboard & Scroll Animations -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Bilingual Translations Dictionary (English & Arabic)
+        const translations = {
+            en: {
+                navName: "Saud Alshammari",
+                navRole: "Data Engineer",
+                navAbout: "About",
+                navExperience: "Experience",
+                navProjects: "Projects",
+                navSkills: "Skills",
+                navCerts: "Certifications",
+                navContact: "Contact",
+                heroBadge: "Microsoft Certified Fabric Data Engineer • Riyadh, KSA",
+                heroGreeting: "Hello, I'm",
+                heroName: "Saud Sultan Alshammari",
+                heroHeadline: "Data Science Graduate | Cloud Data Engineer | AI & Computer Vision Developer",
+                heroBio: "Ambitious Data Science graduate with practical industry experience at Saudi Aramco and MCIT. Specializing in cloud data transformation, Microsoft Fabric (OneLake & Lakehouse), and end-to-end AI pipelines that turn complex data into strategic decisions.",
+                ctaProjects: "Explore Projects",
+                ctaContact: "Get In Touch",
+                ctaCopyEmail: "Copy Email",
+                stat1: "YOLOv8 Model Accuracy",
+                stat2: "Global Certifications",
+                stat3: "Enterprise Co-op Roles",
+                cardExpLabel: "Training Pedigree",
+                aboutSub: "Background & Academic Foundation",
+                aboutTitle: "Bridging Data Engineering & Applied AI",
+                aboutPill: "Professional Profile",
+                aboutHeading: "Architecting Scalable Lakehouses & Intelligent Systems",
+                aboutP1: "As a Data Science graduate from the University of Hail, I combine rigorous statistical and machine learning foundations with modern cloud data engineering practices. My hands-on cooperative training at both Saudi Aramco and the Ministry of Communication and Information Technology (MCIT) shaped my ability to operate in high-impact enterprise environments.",
+                aboutP2: "Certified across Microsoft Fabric (DP-700), Google Data Analytics, IBM Business Analysis, Oracle Cloud, and Cisco Python, I am passionate about cloud migration, data governance, and building automated pipelines that empower executive business intelligence.",
+                langTitle: "Languages",
+                langValue: "Arabic (Native), English (Fluent)",
+                locTitle: "Base Location",
+                locValue: "Riyadh, Saudi Arabia",
+                focusTitle: "Core Focus",
+                focusValue: "Cloud Data & AI",
+                eduBadge: "Academic Degree",
+                eduDegree: "Bachelor of Data Science",
+                eduUni: "University of Hail",
+                eduDate: "Graduated: June 2026",
+                eduHighlightsTitle: "Key Focus Areas",
+                eduH1: "Deep Learning & Computer Vision (YOLOv8)",
+                eduH2: "Data Warehousing, Modeling & Governance",
+                eduH3: "Cloud Data Ingestion & BI Visualization",
+                expSub: "Enterprise Exposure",
+                expTitle: "Cooperative Training Experience",
+                expRoleBadge: "Cooperative Training Intern",
+                exp1Org: "Ministry of Communication and Information Technology (MCIT)",
+                exp1Dept: "Parallel Communications Sector Development Department",
+                exp1Desc: "Contributed to sector development initiatives, data analytics reporting, and digital transformation workflows within Saudi Arabia's national ICT regulatory and development body.",
+                exp2Org: "Saudi Aramco",
+                exp2Dept: "DS Learning & Development Department",
+                exp2Desc: "Supported data-driven learning and workforce development operations, structuring analytical insights, tracking competency metrics, and enhancing automated reporting processes.",
+                projSub: "Applied AI & Full-Stack Engineering",
+                projTitle: "Featured Projects",
+                p0FlagshipTag: "Flagship Enterprise Product",
+                p0Badge1: "Enterprise SaaS / Native App",
+                p0BannerTitle: "Intelligent Governance & Risk Architecture",
+                p0Metric1: "Audit & Versioning",
+                p0Metric2: "Flexible Data Mapping",
+                p0RoleLabel: "My Role & Contributions",
+                p0RoleDesc: "Led solution architecture design, rules & controls data modeling, compliance & risk engine engineering, scoring methodology definition, UX & configuration flows, and packaging the platform as a distributable Enterprise SaaS / Snowflake Native App.",
+                p0Title: "Compliance & Risk Engine",
+                p0Summary: "An intelligent compliance and risk management engine engineered as a distributable enterprise product, transforming regulatory controls, corporate policies, and operational data into clear, actionable risk and compliance assessments.",
+                p0B1: "Hybrid Governance & Rule Model: Combines centrally managed baseline controls with tenant-level customization of thresholds, policies, and internal rules without altering core governance standards.",
+                p0B2: "End-to-End Risk & Compliance Lifecycle: Supports compliance framework management, automated rule evaluation, dynamic risk & compliance scoring, open findings generation, corrective action recommendations, versioning, and full approval audit logs.",
+                p0B3: "Secure Multi-Source Integration: Connects to enterprise data sources under strict least-privilege permissions (RBAC), harmonizing diverse schemas through a flexible Data Mapping layer.",
+                p1Title: "Thamudic Inscription Recognition & Translation System",
+                p1Summary: "An end-to-end AI mobile solution designed to detect, classify, and translate ancient Thamudic inscriptions directly from smartphone camera captures, preserving Arabian cultural heritage.",
+                p1B1: "Curated and annotated a custom dataset of 3,000+ inscription images for model training & validation.",
+                p1B2: "Trained a YOLOv8 deep learning model achieving 95.66% accuracy in symbol recognition.",
+                p1B3: "Built a cross-platform Flutter app integrated with Firebase for real-time translation storage and retrieval.",
+                p2Title: "Employee Training & Promotion Management Platform",
+                p2Summary: "A centralized web platform built to digitize employee training records, automate certification expiry tracking, and streamline multi-tier promotion readiness approvals.",
+                p2B1: "Implemented role-based access control (RBAC) for employees, supervisors, and training coordinators.",
+                p2B2: "Built automated background scheduling services for course expiry monitoring and renewal alerts.",
+                p2B3: "Designed executive reporting dashboards to monitor departmental compliance and training completion.",
+                skillsSub: "Technical Arsenal",
+                skillsTitle: "Skills & Core Competencies",
+                skillCat1: "Cloud & Data Platforms",
+                skillCat2: "Programming & Data Stack",
+                skillCat3: "Machine Learning & AI",
+                skillCat4: "Data Governance & Architecture",
+                skillCat5: "Data Analytics & Wrangling",
+                skillCat6: "Business Analysis",
+                certSub: "Verified Industry Credentials",
+                certTitle: "Professional Certifications",
+                contactSub: "Let's Collaborate",
+                contactTitle: "Ready to Build Data-Driven Impact?",
+                contactDesc: "Open to Data Engineering, Data Science, Cloud Analytics, and AI opportunities across Saudi Arabia. Feel free to reach out directly via email, phone, or the message form.",
+                phoneLabel: "Phone / WhatsApp",
+                formName: "Your Name",
+                formEmail: "Your Email",
+                formSubject: "Subject",
+                formMsg: "Message",
+                formSubmit: "Send Message",
+                footerCopy: "© 2026 Saud Sultan Alshammari. All rights reserved."
+            },
+            ar: {
+                navName: "سعود الشمري",
+                navRole: "مهندس بيانات",
+                navAbout: "نبذة عني",
+                navExperience: "الخبرات",
+                navProjects: "المشاريع",
+                navSkills: "المهارات",
+                navCerts: "الشهادات",
+                navContact: "تواصل معي",
+                heroBadge: "مهندس بيانات معتمد في Microsoft Fabric • الرياض، السعودية",
+                heroGreeting: "مرحباً، أنا",
+                heroName: "سعود سلطان الشمري",
+                heroHeadline: "خريج علوم البيانات | مهندس بيانات سحابية | مطور ذكاء اصطناعي ورؤية حاسوبية",
+                heroBio: "خريج علوم بيانات طموح بخبرة عملية في أرامكو السعودية ووزارة الاتصالات وتقنية المعلومات (MCIT). متخصص في تحويل البيانات السحابية، ومنصة Microsoft Fabric (OneLake & Lakehouse)، وبناء أنظمة الذكاء الاصطناعي لدعم القرارات الاستراتيجية.",
+                ctaProjects: "استعرض المشاريع",
+                ctaContact: "تواصل معي",
+                ctaCopyEmail: "نسخ البريد",
+                stat1: "دقة نموذج YOLOv8",
+                stat2: "شهادات احترافية عالمية",
+                stat3: "تجارب تدريب في جهات كبرى",
+                cardExpLabel: "الخبرة التدريبية",
+                aboutSub: "الخلفية الأكاديمية والمهنية",
+                aboutTitle: "الجمع بين هندسة البيانات والذكاء الاصطناعي التطبيقي",
+                aboutPill: "الملف المهني",
+                aboutHeading: "تصميم مستودعات البيانات السحابية والأنظمة الذكية",
+                aboutP1: "بصفتي خريج علوم بيانات من جامعة حائل، أجمع بين الأسس الإحصائية وخوارزميات تعلم الآلة وبين أحدث ممارسات هندسة البيانات السحابية. ساهم تدريبي التعاوني في كل من أرامكو السعودية ووزارة الاتصالات وتقنية المعلومات في صقل مهاراتي للعمل في بيئات مؤسسية عالية التأثير.",
+                aboutP2: "حاصل على اعتمادات احترافية من مايكروسوفت (Fabric DP-700)، وجوجل لتحليل البيانات، وIBM لتحليل الأعمال، وأوراكل السحابية، وسيسكو في بايثون. شغوف بمبادرات الترحيل السحابي وحوكمة البيانات وبناء خطوط بيانات مؤتمتة تدعم ذكاء الأعمال.",
+                langTitle: "اللغات",
+                langValue: "العربية (اللغة الأم)، الإنجليزية (طلاقة)",
+                locTitle: "المقر",
+                locValue: "الرياض، المملكة العربية السعودية",
+                focusTitle: "التخصص الأساسي",
+                focusValue: "البيانات السحابية والذكاء الاصطناعي",
+                eduBadge: "المؤهل الأكاديمي",
+                eduDegree: "بكالوريوس علوم البيانات",
+                eduUni: "جامعة حائل",
+                eduDate: "تاريخ التخرج: يونيو 2026",
+                eduHighlightsTitle: "أبرز مجالات التركيز",
+                eduH1: "التعلم العميق والرؤية الحاسوبية (YOLOv8)",
+                eduH2: "مستودعات البيانات ونمذجتها وحوكمتها",
+                eduH3: "استيعاب البيانات السحابية ولوحات ذكاء الأعمال",
+                expSub: "الخبرة المؤسسية",
+                expTitle: "التدريب التعاوني",
+                expRoleBadge: "متدرب تدريب تعاوني",
+                exp1Org: "وزارة الاتصالات وتقنية المعلومات (MCIT)",
+                exp1Dept: "إدارة تطوير قطاع الاتصالات الموازية",
+                exp1Desc: "المساهمة في مبادرات تطوير القطاع، وإعداد تقارير تحليل البيانات، ودعم مسارات التحول الرقمي ضمن المنظومة الوطنية للاتصالات وتقنية المعلومات.",
+                exp2Org: "أرامكو السعودية (Saudi Aramco)",
+                exp2Dept: "إدارة التعلم والتطوير (DS Learning & Development)",
+                exp2Desc: "دعم عمليات التعلم وتطوير القوى العاملة المبنية على البيانات، وهيكلة الرؤى التحليلية، ومتابعة مؤشرات الكفاءة وتحسين التقارير المؤتمتة.",
+                projSub: "الذكاء الاصطناعي وتطوير الأنظمة",
+                projTitle: "أبرز المشاريع",
+                p0FlagshipTag: "منتج مؤسسي متكامل",
+                p0Badge1: "SaaS مؤسسي / تطبيق سحابي أصيل",
+                p0BannerTitle: "معمارية الحوكمة وإدارة المخاطر الذكية",
+                p0Metric1: "سجل التدقيق والإصدارات",
+                p0Metric2: "طبقة Data Mapping مرنة",
+                p0RoleLabel: "دوري ومساهماتي في المشروع",
+                p0RoleDesc: "تصميم معمارية الحل، بناء نموذج البيانات للقواعد والضوابط، هندسة محرك الامتثال والمخاطر، تعريف منهجية التقييم والـ Scoring، تصميم تجربة المستخدم والإعدادات، وتجهيز المنتج ليكون قابلاً للنشر والتوزيع كحل SaaS / Snowflake Native App للمؤسسات.",
+                p0Title: "Compliance & Risk Engine (محرك الامتثال وإدارة المخاطر)",
+                p0Summary: "محرك ذكي للامتثال وإدارة المخاطر يعمل كمنتج قابل للتوزيع على بيئات المؤسسات، يهدف إلى تحويل الضوابط والسياسات والبيانات التشغيلية إلى تقييمات واضحة ودقيقة للمخاطر والامتثال.",
+                p0B1: "نموذج قواعد هجين (Hybrid Rule Model): يجمع بين ضوابط وقواعد جاهزة تُدار مركزياً، مع تمكين كل جهة من تخصيص الحدود والسياسات وإضافة قواعد داخلية دون التأثير على القواعد الأساسية.",
+                p0B2: "دورة حياة متكاملة للامتثال والمخاطر: إدارة أطر الامتثال، تقييم القواعد آلياً، حساب درجات المخاطر والامتثال، إنشاء الملاحظات والمخاطر المفتوحة، اقتراح الإجراءات التصحيحية، تتبع الإصدارات، وسجل كامل للتغييرات والاعتمادات.",
+                p0B3: "تكامل آمن مع مصادر البيانات: يتكامل مع بيانات الجهة بصلاحيات محدودة وآمنة (RBAC)، مع دعم ربط مصادر متعددة ومواءمة الحقول المختلفة عبر طبقة Data Mapping مرنة.",
+                p1Title: "نظام التعرف على النقوش الثمودية وترجمتها",
+                p1Summary: "حل متكامل بالذكاء الاصطناعي وتطبيقات الهواتف الذكية لاكتشاف وتصنيف وترجمة النقوش الثمودية القديمة مباشرة عبر كاميرا الهاتف للمساهمة في حفظ التراث الثقافي.",
+                p1B1: "بناء وتصنيف مجموعة بيانات مخصصة تضم أكثر من 3,000 صورة للنقوش لتدريب النموذج والتحقق من دقته.",
+                p1B2: "تدريب نموذج التعلم العميق YOLOv8 وتحقيق دقة وصلت إلى 95.66% في التعرف على الرموز الثمودية.",
+                p1B3: "تطوير تطبيق جوال باستخدام Flutter وربطه مع Firebase لتخزين واسترجاع الترجمات بشكل فوري.",
+                p2Title: "منصة إدارة تدريب الموظفين والترقيات",
+                p2Summary: "منصة ويب مركزية لأتمتة سجلات تدريب الموظفين، ومتابعة تواريخ انتهاء الشهادات، وتسهيل مسارات اعتماد الجاهزية للترقية.",
+                p2B1: "تطبيق نظام صلاحيات متعدد المستويات (RBAC) للموظفين والمشرفين ومنسقي التدريب.",
+                p2B2: "بناء خدمات جدولة خلفية مؤتمتة لمراقبة انتهاء الدورات وإرسال إشعارات التجديد تلقائياً.",
+                p2B3: "تصميم لوحات تقارير تفاعلية لمتابعة الامتثال التدريبي وحالة الموظفين عبر الإدارات.",
+                skillsSub: "القدرات التقنية",
+                skillsTitle: "المهارات والكفاءات الأساسية",
+                skillCat1: "المنصات السحابية والبيانات",
+                skillCat2: "البرمجة وقواعد البيانات",
+                skillCat3: "تعلم الآلة والذكاء الاصطناعي",
+                skillCat4: "حوكمة وهندسة البيانات",
+                skillCat5: "تحليل البيانات ومعالجتها",
+                skillCat6: "تحليل الأعمال",
+                certSub: "اعتمادات دولية موثقة",
+                certTitle: "الشهادات الاحترافية",
+                contactSub: "لنتعاون معاً",
+                contactTitle: "هل تبحث عن قيمة حقيقية من بياناتك؟",
+                contactDesc: "متاح لفرص العمل في هندسة البيانات، علوم البيانات، التحليلات السحابية، والذكاء الاصطناعي في المملكة العربية السعودية. يسعدني تواصلك المباشر.",
+                phoneLabel: "الهاتف / واتساب",
+                formName: "الاسم الكامل",
+                formEmail: "البريد الإلكتروني",
+                formSubject: "الموضوع",
+                formMsg: "الرسالة",
+                formSubmit: "إرسال الرسالة",
+                footerCopy: "© 2026 سعود سلطان الشمري. جميع الحقوق محفوظة."
+            }
+        };
+
+        let currentLang = 'en';
+
+        // Language Toggle Function (Switches LTR/RTL & All Texts)
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            const htmlEl = document.documentElement;
+            htmlEl.setAttribute('lang', currentLang);
+            htmlEl.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+
+            document.getElementById('langLabel').textContent = currentLang === 'en' ? 'عربي' : 'English';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.textContent = translations[currentLang][key];
+                }
+            });
+
+            showToast(currentLang === 'ar' ? 'تم التبديل إلى اللغة العربية' : 'Switched to English');
+        }
+
+        // Theme Toggle Function
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Toast Helper (Uses custom banner instead of alert)
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            toastMsg.textContent = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // Copy Email using reliable fallback for iFrame environments
+        function copyToClipboard(text, successMessage) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(successMessage);
+        }
+
+        function copyEmail() {
+            copyToClipboard(
+                'SAUDSC5B@GMAIL.COM',
+                currentLang === 'ar' ? 'تم نسخ البريد الإلكتروني: SAUDSC5B@GMAIL.COM' : 'Email copied: SAUDSC5B@GMAIL.COM'
+            );
+        }
+
+        function copyPhone() {
+            copyToClipboard(
+                '+966559246693',
+                currentLang === 'ar' ? 'تم نسخ رقم الهاتف: +966559246693' : 'Phone copied: +966559246693'
+            );
+        }
+
+        // Contact Form Submission Handler (Opens pre-filled mailto + shows toast)
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('senderName').value;
+            const email = document.getElementById('senderEmail').value;
+            const subject = document.getElementById('senderSubject').value;
+            const message = document.getElementById('senderMessage').value;
+
+            const mailtoLink = `mailto:SAUDSC5B@GMAIL.COM?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
+            window.location.href = mailtoLink;
+
+            showToast(currentLang === 'ar' ? 'جاري فتح تطبيق البريد لإرسال رسالتك...' : 'Opening email client to send your message...');
+            e.target.reset();
+        }
+
+        // Scroll Reveal Observer
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.12 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Interactive Data Node / Constellation Canvas Background
+        const canvas = document.getElementById('dataCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class NodeParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.45;
+                this.vy = (Math.random() - 0.5) * 0.45;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(6, 182, 212, 0.55)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(Math.floor(window.innerWidth / 22), 65);
+            for (let i = 0; i < count; i++) {
+                particles.push(new NodeParticle());
+            }
+        }
+
+        function animateNodes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 140) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(16, 185, 129, ${(1 - dist / 140) * 0.22})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateNodes);
+        }
+
+        window.onload = function() {
+            initParticles();
+            animateNodes();
+        };
+    </script>
+</body>
+</html>
